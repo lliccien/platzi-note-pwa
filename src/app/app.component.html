@@ -1,19 +1,69 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>Note App</span>
+        <span class="space"></span>
+        <span></span>
+        <span class="space"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
 <div style="text-align:center">
     <h1>
-        Welcome to {{ title }} v2!
+        {{ title }} !
     </h1>
-    <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    <button *ngIf="!authenticated" mat-raised-button color="accent" (click)="login()" class="button-google">
+      <img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" alt="" class="google">
+      GOOGLE
+    </button>
+    <button *ngIf="authenticated" mat-raised-button color="accent" (click)="this.authService.logout()">Logout</button>
+    <div>
+        <img width="50" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    </div>
+
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-    <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-    </li>
-    <li>
-        <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-    </li>
-    <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-    </li>
-</ul>
+<mat-accordion *ngIf="authenticated">
+    <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                note
+            </mat-panel-title>
+            <mat-panel-description>
+                Crear una nueva note
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field>
+            <input matInput placeholder="Titulo de la note" [(ngModel)]="note.title">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-select placeholder="Categoria" [(ngModel)]="note.category">
+                <mat-option *ngFor="let category of categories" [value]="category">
+                    {{ category }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <textarea matInput placeholder="Contenido de la note" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" [(ngModel)]="note.content"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="saveNote()" class="button-save"> Guardar note</button>
+    </mat-expansion-panel>
+</mat-accordion>
+
+<mat-list>
+    <mat-list-item *ngFor="let note of notes | async">
+        <div class="grid-container">
+            <div class="grid-item" (click)="selectNote(note.id)">
+                <h3 matLine> {{note.title}} </h3>
+                <p matLine> {{note.category}} </p>
+                <p matLine> {{note.content}} </p>
+                <p matLine> {{note.time | date}} </p>
+            </div>
+            <div class="grid-item">
+                <button mat-icon-button color="warn" (click)="deleteNote(note.id)">
+                  <mat-icon class="delete">delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </mat-list-item>
+</mat-list>

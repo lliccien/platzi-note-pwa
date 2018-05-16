@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Service Worker
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -35,6 +36,7 @@ import { AppComponent } from './app.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     AppMaterialModule,
+    FormsModule
   ],
   providers: [
     { provide: FirebaseOptionsToken, useValue: environment.firebaseConfig },
