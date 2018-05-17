@@ -60,7 +60,7 @@
                 <p matLine> {{note.time | date}} </p>
             </div>
             <div class="grid-item">
-                <button mat-icon-button color="warn" (click)="deleteNote(note.id)">
+                <button *ngIf="authenticated" mat-icon-button color="warn" (click)="deleteNote(note.id)">
                   <mat-icon class="delete">delete</mat-icon>
                 </button>
             </div>

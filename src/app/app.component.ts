@@ -63,12 +63,14 @@ export class AppComponent implements OnInit {
       this.notesSevices.createNote(this.note);
       this.note = {};
       this.panelOpenState = false;
+      this.notification('Note Create');
     } else {
       this.note.time = new Date().getTime();
       this.notesSevices.editNote(this.note.id, this.note)
         .then(note => {
           this.note = {};
           this.panelOpenState = false;
+          this.notification('Note Update');
         })
         .catch(error => console.error(error) );
     }
@@ -88,6 +90,7 @@ export class AppComponent implements OnInit {
 
   deleteNote(id) {
     this.notesSevices.deleteNote(id);
+    this.notification('Note delete');
   }
 
   login() {
