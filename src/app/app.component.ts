@@ -11,8 +11,9 @@ import { AuthService } from './services/auth.service';
 import { NotesService } from './services/notes.service';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, filter, take } from 'rxjs/operators';
 import { not } from '@angular/compiler/src/output/output_ast';
+import { MessagingService } from './services/messaging.service';
 
 @Component({
   selector: 'app-root',
@@ -26,14 +27,34 @@ export class AppComponent implements OnInit {
   authenticated: any;
   notes: Observable<any[]>;
   note: any = {};
+  message: any;
 
   constructor(
     private swUpdate: SwUpdate,
     private notesSevices: NotesService,
     public snackBar: MatSnackBar,
     public authService: AuthService,
+    public messagingService: MessagingService
   ) {
 
+    this.authService.user.pipe(
+      filter(user => !!user), // filter null
+      take(1) // take first real user
+    ).subscribe(user => {
+          if (user) {
+            this.messagingService.getPermission(user);
+            this.messagingService.monitorRefresh(user);
+            this.messagingService.receiveMessages();
+            this.messagingService.currentMessage.subscribe(notification => {
+              this.message = notification;
+                if (this.message) {
+                  setTimeout(() => {
+                    this.message = undefined;
+                  }, 3000);
+                }
+            });
+          }
+      });
   }
 
   ngOnInit(): void {

@@ -1,3 +1,14 @@
+.header {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.logo {
+    display: block;
+    margin: auto;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: 90% 10%;
@@ -25,12 +36,24 @@
 }
 
 .button-google {
-    width: 90%;
-    font-size: 50px;
     padding: 10px;
 }
 
 .google {
-    height: 50px;
+    height: 25px;
     width: auto;
+}
+
+.button-logo {
+    float: left;
+    height: 50px;
+}
+
+.notification {
+    min-height: 150px;
+    margin: 25px;
+}
+
+.notification img {
+    float: left;
 }
