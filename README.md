@@ -1,6 +1,6 @@
 # PlatziNotePwa
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
+WPA application of CURD of notes with Angular 6 and firebase using firesotre and sending of notification notification
 
 ## Development server
 
