@@ -1,4 +1,4 @@
-# PlatziNotePwa
+# Platzi Note PWA
 
 WPA application of CURD of notes with Angular 6 and firebase using firesotre and sending of notification notification
 
