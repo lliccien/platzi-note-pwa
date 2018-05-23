@@ -6,6 +6,9 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import {firebase} from '@firebase/app';
 import '@firebase/messaging';
 import { Observable, Subject } from 'rxjs';
+import { map, filter, take } from 'rxjs/operators';
+
+import { AuthService } from './auth.service';
 
 
 
@@ -18,13 +21,13 @@ export class MessagingService {
   private messageSource = new Subject();
   currentMessage = this.messageSource.asObservable();
 
-  constructor(private firestore: AngularFirestore) {
+  constructor(private firestore: AngularFirestore, private Auth: AngularFireAuth, private authService: AuthService) {
 
   }
 
 
   // get permission to send messages
-  getPermission(user) {
+  getPermission() {
     this.messaging.requestPermission()
     .then(() => {
       console.log('Notification permission granted.');
@@ -32,7 +35,7 @@ export class MessagingService {
     })
     .then(token => {
       console.log(token);
-      this.saveToken(user, token);
+      this.saveToken(token);
     })
     .catch((err) => {
       console.log('Unable to get permission to notify.', err);
@@ -41,12 +44,12 @@ export class MessagingService {
 
 
   // Listen for token refresh
-  monitorRefresh(user) {
+  monitorRefresh() {
     this.messaging.onTokenRefresh(() => {
       this.messaging.getToken()
       .then(refreshedToken => {
         console.log('Token refreshed.');
-        this.saveToken(user, refreshedToken);
+        this.saveToken(refreshedToken);
       })
       .catch( err => console.log(err, 'Unable to retrieve new token') );
     });
@@ -64,8 +67,13 @@ export class MessagingService {
   }
 
   // save the permission token in firestore
-  private saveToken(user, token): void {
-
+  private saveToken(token): void {
+    // this.Auth.authState.subscribe(user => {
+      this.authService.user.pipe(
+        filter(user => !!user), // filter null
+        take(1) // take first real user
+      ).subscribe(user => {
+      console.log(user);
       const currentTokens = user.fcmTokens || { };
       console.log(currentTokens, token);
 
@@ -74,6 +82,10 @@ export class MessagingService {
         const userRef = this.firestore.collection('users').doc(user.uid);
         const tokens = { ...currentTokens, [token]: true };
         userRef.update({ fcmTokens: tokens });
+
       }
+
+    });
   }
+
 }

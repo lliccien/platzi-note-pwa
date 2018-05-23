@@ -12,7 +12,7 @@ import { NotesService } from './services/notes.service';
 
 import { Observable } from 'rxjs';
 import { map, filter, take } from 'rxjs/operators';
-import { not } from '@angular/compiler/src/output/output_ast';
+
 import { MessagingService } from './services/messaging.service';
 
 @Component({
@@ -35,27 +35,7 @@ export class AppComponent implements OnInit {
     public snackBar: MatSnackBar,
     public authService: AuthService,
     public messagingService: MessagingService
-  ) {
-
-    this.authService.user.pipe(
-      filter(user => !!user), // filter null
-      take(1) // take first real user
-    ).subscribe(user => {
-          if (user) {
-            this.messagingService.getPermission(user);
-            this.messagingService.monitorRefresh(user);
-            this.messagingService.receiveMessages();
-            this.messagingService.currentMessage.subscribe(notification => {
-              this.message = notification;
-                if (this.message) {
-                  setTimeout(() => {
-                    this.message = undefined;
-                  }, 3000);
-                }
-            });
-          }
-      });
-  }
+  ) {  }
 
   ngOnInit(): void {
     // Validate browser SW support and auto refresh of the app
@@ -66,6 +46,26 @@ export class AppComponent implements OnInit {
     }
     this.authenticated = this.authService.isLogged()
       .subscribe(user => this.authenticated = user);
+
+      // this.authService.user.pipe(
+      //   filter(user => !!user), // filter null
+      //   take(1) // take first real user
+      // ).subscribe(user => {
+      //       if (user) {
+              this.messagingService.getPermission();
+              this.messagingService.monitorRefresh();
+              this.messagingService.receiveMessages();
+              this.messagingService.currentMessage.subscribe(notification => {
+                this.message = notification;
+                  if (this.message) {
+                    setTimeout(() => {
+                      this.message = undefined;
+                    }, 3000);
+                  }
+              });
+      //       }
+      // });
+
     this.getNotes();
 
   }
