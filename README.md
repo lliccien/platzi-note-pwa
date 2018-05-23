@@ -14,14 +14,16 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+## Send messages
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+With this command you can test the sending and receiving of messages:
 
-## Running end-to-end tests
+```
+curl https://fcm.googleapis.com/fcm/send \
+-H"Content-Type: application/json" \
+-H"Authorization: key=AAAAcZjdlJk:APA91bGUL5xtX_hAEkeUPb_-6MFICBs9oFTtHsuebsubrOVDCU0GPMupq_YZ7yeju2J3lhBxwU-3EBazSmJN0YvrZU27QqHiLw0JfZQRbyRdmQftYpAmNbmUx_-zTrNcvsyzVk3YFhTb" \
+-d '{ "notification": { "title": "New note!", "body": "A new note has been added","icon":"https://goo.gl/Gey7NW", "click_action": "https://pwa-platzi.firebaseapp.com/"}, "to" : "..."
+}'
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+They must replace the contents of to: "..." by the hash that is displayed in the navigator browser development console
