@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     public snackBar: MatSnackBar,
     public authService: AuthService,
     public messagingService: MessagingService
-  ) {  }
+  ) {}
 
   ngOnInit(): void {
     // Validate browser SW support and auto refresh of the app
@@ -47,27 +47,26 @@ export class AppComponent implements OnInit {
     this.authenticated = this.authService.isLogged()
       .subscribe(user => this.authenticated = user);
 
-      // this.authService.user.pipe(
-      //   filter(user => !!user), // filter null
-      //   take(1) // take first real user
-      // ).subscribe(user => {
-      //       if (user) {
-              this.messagingService.getPermission();
-              this.messagingService.monitorRefresh();
-              this.messagingService.receiveMessages();
-              this.messagingService.currentMessage.subscribe(notification => {
-                this.message = notification;
-                  if (this.message) {
-                    setTimeout(() => {
-                      this.message = undefined;
-                    }, 3000);
-                  }
-              });
-      //       }
-      // });
+    this.messagingService.getPermission();
+    this.messagingService.monitorRefresh();
+    this.messagingService.receiveMessages();
+    this.messagingService.currentMessage.subscribe(notification => {
+      this.message = notification;
+        if (this.message) {
+          setTimeout(() => {
+            this.message = undefined;
+          }, 3000);
+        }
+    });
 
     this.getNotes();
 
+    this.authService.Auth.auth.getRedirectResult().then(result => {
+      if (result.user !== null) {
+        this.authService.updateUserData(result.user);
+        this.notification('Welcome to PLatzi Notes PWA!!!');
+      }
+    });
   }
 
   notification(message, duration = 3000 ) {
@@ -117,11 +116,10 @@ export class AppComponent implements OnInit {
   login() {
     this.authService.loginGoogle()
       .then(credential => {
-        this.notification('Welcome to PLatzi Notes PWA!!!');
-        return this.authService.updateUserData(credential.user);
+        console.log(credential);
+        // return this.authService.updateUserData(credential.user);
       })
       .catch(error => console.error(error));
-
   }
 
   logout() {

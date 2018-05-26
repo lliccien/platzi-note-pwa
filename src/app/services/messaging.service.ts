@@ -48,7 +48,7 @@ export class MessagingService {
     this.messaging.onTokenRefresh(() => {
       this.messaging.getToken()
       .then(refreshedToken => {
-        console.log('Token refreshed.');
+        // console.log('Token refreshed.');
         this.saveToken(refreshedToken);
       })
       .catch( err => console.log(err, 'Unable to retrieve new token') );
@@ -60,7 +60,7 @@ export class MessagingService {
   // used to show message when app is open
   receiveMessages() {
     this.messaging.onMessage(payload => {
-     console.log('Message received. ', payload);
+    //  console.log('Message received. ', payload);
      this.messageSource.next(payload);
    });
 
@@ -73,9 +73,9 @@ export class MessagingService {
         filter(user => !!user), // filter null
         take(1) // take first real user
       ).subscribe(user => {
-      console.log(user);
+      // console.log(user);
       const currentTokens = user.fcmTokens || { };
-      console.log(currentTokens, token);
+      // console.log(currentTokens, token);
 
       // If token does not exist in firestore, update db
       if (!currentTokens[token]) {

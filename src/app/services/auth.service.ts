@@ -27,7 +27,7 @@ export class AuthService {
 
   user: Observable<User | null>;
 
-  constructor(private Auth: AngularFireAuth, private firestore: AngularFirestore) {
+  constructor(public Auth: AngularFireAuth, private firestore: AngularFirestore) {
     this.user = this.Auth.authState.pipe(
       switchMap(user => {
         if (user) {
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   loginGoogle() {
-    return this.Auth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    return this.Auth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
   }
 
   logout() {
